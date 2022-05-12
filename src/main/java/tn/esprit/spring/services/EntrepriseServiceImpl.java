@@ -30,7 +30,7 @@ public class EntrepriseServiceImpl implements IEntrepriseService {
 		return dep.getId();
 	}
 	
-	public void affecterDepartementAEntreprise(int depId, int entrepriseId) {
+	public int affecterDepartementAEntreprise(int depId, int entrepriseId) {
 		//Le bout Master de cette relation N:1 est departement  
 				//donc il faut rajouter l'entreprise a departement 
 				// ==> c'est l'objet departement(le master) qui va mettre a jour l'association
@@ -41,8 +41,9 @@ public class EntrepriseServiceImpl implements IEntrepriseService {
 				
 				depManagedEntity.setEntreprise(entrepriseManagedEntity);
 				deptRepoistory.save(depManagedEntity);
-		
-	}
+
+        return depId;
+    }
 	
 	public List<String> getAllDepartementsNamesByEntreprise(int entrepriseId) {
 		Entreprise entrepriseManagedEntity = entrepriseRepoistory.findById(entrepriseId).get();
