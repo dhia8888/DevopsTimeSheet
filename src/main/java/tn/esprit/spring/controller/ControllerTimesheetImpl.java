@@ -27,9 +27,8 @@ public class ControllerTimesheetImpl {
 		return mission.getId();
 	}
 
-	public void affecterMissionADepartement(int missionId, int depId) {
-		itimesheetservice.affecterMissionADepartement(missionId, depId);
-
+	public int affecterMissionADepartement(int missionId, int depId) {
+	return 	itimesheetservice.affecterMissionADepartement(missionId, depId);
 	}
 	public void ajouterTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin) {
 		itimesheetservice.ajouterTimesheet(missionId, employeId, dateDebut, dateFin);
@@ -37,8 +36,8 @@ public class ControllerTimesheetImpl {
 	}
 
 	
-	public void validerTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin, int validateurId) {
-		itimesheetservice.validerTimesheet(missionId, employeId, dateDebut, dateFin, validateurId);
+	public int validerTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin, int validateurId) {
+		return itimesheetservice.validerTimesheet(missionId, employeId, dateDebut, dateFin, validateurId);
 
 	}
 	public List<Mission> findAllMissionByEmployeJPQL(int employeId) {

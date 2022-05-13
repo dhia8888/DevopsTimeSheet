@@ -41,7 +41,7 @@ public class TimesheetServiceImpl implements ITimesheetService {
 		return mission.getId();
 	}
     
-	public void affecterMissionADepartement(int missionId, int depId) {
+	public int affecterMissionADepartement(int missionId, int depId) {
 		Optional<Mission> m = missionRepository.findById(missionId);
 		Optional<Departement> d = deptRepoistory.findById(depId);
 		Departement departement = new Departement();
@@ -62,7 +62,9 @@ public class TimesheetServiceImpl implements ITimesheetService {
 		missionRepository.save(mission);
 		if (l.isDebugEnabled()) {
 			l.debug(String.format("mission %s ajoute au departement %s", mission.getName(), departement.getName()));
+			return 1;
 		}
+		return 0;
 	}
 
 	public void ajouterTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin) {
@@ -81,7 +83,7 @@ public class TimesheetServiceImpl implements ITimesheetService {
 	}
 
 	
-	public void validerTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin, int validateurId) {
+	public int validerTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin, int validateurId) {
 		l.info("-- valider Timesheet --");
 		Optional<Employe> validateurList = employeRepository.findById(validateurId);
 		Optional<Mission> missionList = missionRepository.findById(missionId);
@@ -90,7 +92,7 @@ public class TimesheetServiceImpl implements ITimesheetService {
 			employe = validateurList.get();
 			if (!employe.getRole().equals(Role.CHEF_DEPARTEMENT)) {
 				l.warn("l'employe doit etre chef de departement pour valider Timesheet !");
-				return;
+				return 1;
 			}
 		}
 		//verifier s'il est le chef de departement de la mission en question
@@ -106,7 +108,7 @@ public class TimesheetServiceImpl implements ITimesheetService {
 		}
 		if (!chefDeLaMission) {
 			l.warn("l'employe doit etre chef de departement de la mission");
-			return;
+			return 1;
 		}
 
 		TimesheetPK timesheetPK = new TimesheetPK(missionId, employeId, dateDebut, dateFin);
@@ -118,6 +120,7 @@ public class TimesheetServiceImpl implements ITimesheetService {
 		//Comment Lire une date de la base de données
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		l.info("dateDebut : " + dateFormat.format(timesheet.getTimesheetPK().getDateDebut()));
+	   return 0;
 	}
 
 	
@@ -128,6 +131,11 @@ public class TimesheetServiceImpl implements ITimesheetService {
 	
 	public List<Employe> getAllEmployeByMission(int missionId) {
 		return timesheetRepository.getAllEmployeByMission(missionId);
+	}
+
+	@Override
+	public Mission getMissionById(int id) {
+		return null;
 	}
 
 }
