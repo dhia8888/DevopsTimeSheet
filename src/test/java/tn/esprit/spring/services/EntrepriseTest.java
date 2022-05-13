@@ -1,6 +1,8 @@
 package tn.esprit.spring.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,10 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EntrepriseTest {
-        private List<Departement> departementList;
+
+    private static final Logger log = LogManager.getLogger(EntrepriseServiceImpl.class);
+
+    private List<Departement> departementList;
         @Autowired
         private IEntrepriseService serviceEntreprise;
         @Autowired

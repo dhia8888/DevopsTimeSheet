@@ -49,22 +49,18 @@ public class TimesheetServiceImpl implements ITimesheetService {
 		if (m.isPresent()) {
 			mission = m.get();
 			l.info("mission exist");
-		}else {
-			l.warn("mission n'exist pas ");
 		}
 		if (d.isPresent()) {
 			departement = d.get();
 			l.info("department exist");
-		}else {
-			l.warn("department n'exist pas ");
 		}
 		mission.setDepartement(departement);
 		missionRepository.save(mission);
-		if (l.isDebugEnabled()) {
-			l.debug(String.format("mission %s ajoute au departement %s", mission.getName(), departement.getName()));
-			return 1;
+		if (l.isDebugEnabled())
+		{
+			l.debug(String.format("mission %s ajouté au departement %s", mission.getName(), departement.getName()));
 		}
-		return 0;
+		return mission.getDepartement().getId();
 	}
 
 	public void ajouterTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin) {
@@ -84,58 +80,65 @@ public class TimesheetServiceImpl implements ITimesheetService {
 
 	
 	public int validerTimesheet(int missionId, int employeId, Date dateDebut, Date dateFin, int validateurId) {
-		l.info("-- valider Timesheet --");
-		Optional<Employe> validateurList = employeRepository.findById(validateurId);
-		Optional<Mission> missionList = missionRepository.findById(missionId);
-		Employe employe = new Employe();
-		if (validateurList.isPresent()) {
-			employe = validateurList.get();
-			if (!employe.getRole().equals(Role.CHEF_DEPARTEMENT)) {
-				l.warn("l'employe doit etre chef de departement pour valider Timesheet !");
-				return 1;
-			}
+		l.info("-- Valider Timesheet --");
+		Optional<Employe> validateur = employeRepository.findById(validateurId);
+		Optional<Mission> mission = missionRepository.findById(missionId);
+		Employe e = new Employe();
+		Mission m = new Mission();
+		if (validateur.isPresent()) {
+			e = validateur.get();
 		}
-		//verifier s'il est le chef de departement de la mission en question
+		if (mission.isPresent()) {
+			m = mission.get();
+		}
+		// verifier le Role CHEF_DEPARTEMENT
+		if (!e.getRole().equals(Role.CHEF_DEPARTEMENT)) {
+			if (l.isDebugEnabled()) {
+				l.debug("l'employe doit etre chef de departement pour valider une feuille de temps !");
+			}
+			return -1;
+		}
+		// verifier s'il est le chef de departement
 		boolean chefDeLaMission = false;
-		for (Departement dep : employe.getDepartements()) {
-			if (missionList.isPresent()) {
-				Mission mission = missionList.get();
-				if (dep.getId() == mission.getDepartement().getId()) {
-					chefDeLaMission = true;
-					break;
-				}
+		for (Departement dep : e.getDepartements()) {
+			if (dep.getId() == m.getDepartement().getId()) {
+				chefDeLaMission = true;
+				break;
 			}
 		}
 		if (!chefDeLaMission) {
-			l.warn("l'employe doit etre chef de departement de la mission");
-			return 1;
+			if (l.isDebugEnabled()) {
+				l.debug("l'employe doit etre chef de departement de la mission en question");
+			}
+			return 0;
 		}
-
+		//
 		TimesheetPK timesheetPK = new TimesheetPK(missionId, employeId, dateDebut, dateFin);
 		Timesheet timesheet = timesheetRepository.findBytimesheetPK(timesheetPK);
 		timesheet.setValide(true);
-		if (l.isDebugEnabled()) {
-			l.debug(String.format("timesheet %s missionId au employeId %s", missionId,employeId));
-		}
-		//Comment Lire une date de la base de données
+		l.debug("timesheet validé!");
+
+		// Comment Lire une date de la base de données
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		l.info("dateDebut : " + dateFormat.format(timesheet.getTimesheetPK().getDateDebut()));
-	   return 0;
+		if (l.isDebugEnabled()) {
+			l.debug(String.format("dateDebut : %s", dateFormat.format(timesheet.getTimesheetPK().getDateDebut())));
+		}
+		return 1;
 	}
 
 	
 	public List<Mission> findAllMissionByEmployeJPQL(int employeId) {
 		return timesheetRepository.findAllMissionByEmployeJPQL(employeId);
 	}
-
 	
 	public List<Employe> getAllEmployeByMission(int missionId) {
 		return timesheetRepository.getAllEmployeByMission(missionId);
 	}
 
 	@Override
-	public Mission getMissionById(int id) {
-		return null;
+	public Mission getMissionById(int missionId) {
+		Optional<Mission> m = missionRepository.findById(missionId);
+		return m.isPresent() ? m.get() : null;
 	}
 
 }
