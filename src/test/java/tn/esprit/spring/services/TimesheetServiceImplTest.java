@@ -58,12 +58,12 @@ public class TimesheetServiceImplTest {
     @Test
     public void testAffecterMissionADepartement() {
         l.info("test  Affecter MissionA Departement");
-            Mission mission = new Mission("FBI", "TUNIS");
-            int idMission = timesheetService.ajouterMission(mission);
-            Departement departement = new Departement("AI");
-            int idDepartement = sEntreprise.ajouterDepartement(departement);
-            int idDepAffecte = timesheetService.affecterMissionADepartement(idMission, idDepartement);
-            assertEquals(idDepAffecte, idDepartement);
+        Mission mission = new Mission("FBI", "TUNIS");
+        int idMission = timesheetService.ajouterMission(mission);
+        Departement departement = new Departement("AI");
+        int idDepartement = sEntreprise.ajouterDepartement(departement);
+        int idDepAffecte = timesheetService.affecterMissionADepartement(idMission, idDepartement);
+        assertEquals(idDepAffecte, idDepartement);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class TimesheetServiceImplTest {
             assertNotNull(listEmpl);
             l.info(listEmpl);
         } catch (Exception e) {
-            l.error("could not get list employes" +e.getMessage());
+            l.error("could not get list employes" + e.getMessage());
         }
     }
 
