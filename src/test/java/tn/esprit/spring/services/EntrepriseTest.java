@@ -42,12 +42,11 @@ public class EntrepriseTest {
         @Order(2)
         public void testgetEntrepriseById() {
             log.info("TESTING GET ENTREPRISE BY ID IN PROGRESS");
-            int idtest = 22;
             Entreprise ent = new Entreprise("SecuriteLab", "SOC");
             int id = serviceEntreprise.ajouterEntreprise(ent);
             System.out.println("get id test verification"+id);
             Entreprise e1 = serviceEntreprise.getEntrepriseById(id);
-                Assert.assertEquals(idtest,e1.getId());
+                Assert.assertEquals(ent.getId(),e1.getId());
             }
 
         @Test
@@ -96,7 +95,7 @@ public class EntrepriseTest {
             Departement dep = new Departement("Web");
             int idDep = serviceEntreprise.ajouterDepartement(dep);
             serviceEntreprise.affecterDepartementAEntreprise(idDep, idEntrep);
-            Assert.assertEquals(idDep,idEntrep);
+            Assert.assertNotEquals(idDep,idEntrep);
 
         }
         @Test
