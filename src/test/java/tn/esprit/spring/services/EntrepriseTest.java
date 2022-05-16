@@ -1,6 +1,5 @@
 package tn.esprit.spring.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -15,19 +14,16 @@ import tn.esprit.spring.entities.Departement;
 import java.util.List;
 import static org.junit.Assert.*;
 
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EntrepriseTest {
-
-    private static final Logger log = LogManager.getLogger(EntrepriseServiceImpl.class);
-
-    private List<Departement> departementList;
+        private List<Departement> departementList;
         @Autowired
         private IEntrepriseService serviceEntreprise;
         @Autowired
         private IDepartementService serviceDepartement;
 
+        private static final Logger log = LogManager.getLogger(EntrepriseTest.class);
         @Test
         @Order(1)
         public void testAjouterEntreprise() {
