@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import tn.esprit.spring.entities.Entreprise;
 import org.junit.Assert;
 import tn.esprit.spring.entities.Departement;
-import tn.esprit.spring.repository.EntrepriseRepository;
 import java.util.List;
 import static org.junit.Assert.*;
 
@@ -22,43 +21,38 @@ public class EntrepriseTest {
         @Autowired
         private IEntrepriseService serviceEntreprise;
         @Autowired
-        private EntrepriseRepository repositoryEntreprise;
-        @Autowired
         private IDepartementService serviceDepartement;
 
         @Test
         @Order(1)
-        public void AjouterEntreprisetest1() {
-            Entreprise ent = new Entreprise("vermeg", "banque");
-            int id = serviceEntreprise.ajouterEntreprise(ent);
+        public void testAjouterEntreprise() {
+            log.info("TESTING ADD ENTREPRISE IN PROGRESS");
+            Entreprise ent0 = new Entreprise("vermeg", "banquesoftware");
+            Entreprise ent1 = new Entreprise("business", "data");
+            Entreprise ent2 = new Entreprise("sofrecom", "software");
+            serviceEntreprise.ajouterEntreprise(ent1);
+            serviceEntreprise.ajouterEntreprise(ent2);
+            int id = serviceEntreprise.ajouterEntreprise(ent0);
             Assert.assertNotNull(serviceEntreprise.getEntrepriseById(id));
-            log.info("added successfully");
+            log.info("Entreprise added successfully");
         }
 
         @Test
         @Order(2)
-        public void ajouterEntreprisetest2()  {
-            Entreprise ent=new Entreprise(null,null);
-            int a=serviceEntreprise.ajouterEntreprise(ent);
-            assertEquals(0,a);
-            log.info("added successfully");
-        }
+        public void testgetEntrepriseById() {
+            log.info("TESTING GET ENTREPRISE BY ID IN PROGRESS");
+            int idtest = 22;
+            Entreprise ent = new Entreprise("SecuriteLab", "SOC");
+            int id = serviceEntreprise.ajouterEntreprise(ent);
+            System.out.println("get id test verification"+id);
+            Entreprise e1 = serviceEntreprise.getEntrepriseById(id);
+                Assert.assertEquals(idtest,e1.getId());
+            }
 
         @Test
         @Order(3)
-        public void getEntrepriseByIdtest() {
-
-            Entreprise ent = new Entreprise("Securite", "analysis");
-            int id = serviceEntreprise.ajouterEntreprise(ent);
-            Entreprise e1 = serviceEntreprise.getEntrepriseById(id);
-            Assert.assertNotNull(e1);
-            Entreprise e2 = serviceEntreprise.getEntrepriseById(2);
-            assertNull(e2);
-        };
-
-        @Test
-        @Order(4)
-        public void ajouterDepartementtest()  {
+        public void testajouterDepartement()  {
+            log.info("TESTING ADD DEPARTMENT IN PROGRESS");
             Departement dep =new Departement("Embarque");
             int a=serviceEntreprise.ajouterDepartement(dep);
             assertNotNull(a);
@@ -67,48 +61,59 @@ public class EntrepriseTest {
         }
 
         @Test
+        @Order(4)
+        public void testgetAllDepartementsByEntreprise()  {
+            log.info("TESTING GET ALL DEPARTMENT BY ENTREPRISE IN PROGRESS");
+            try{
+            List<String> depnames=serviceEntreprise.getAllDepartementsNamesByEntreprise(58);
+            assertNotNull(depnames);
+            }catch (Exception e) {
+                log.error("could not get list of Depratment ! " + e.getMessage());
+            }
+        }
+
+        @Test
         @Order(5)
-        public void getEntrepriseByIdTest()  {
-            Entreprise ent=serviceEntreprise.getEntrepriseById(1);
-            assertNotNull(ent);
-            Entreprise entr=repositoryEntreprise.findById(1).get();
-            assertEquals(entr.getName(),ent.getName());
-            assertEquals(entr.getRaisonSocial(),ent.getRaisonSocial());
+        public void testgetAllDepartements() {
+                log.info("TESTING GET ALL DEPRATMENTS IN PROGRESS");
+            try{
+                departementList = serviceDepartement.getAllDepartements();
+            if(departementList.isEmpty()) {
+                log.warn("departments not found");
+            }
+            }catch (Exception e) {
+                    log.error("Please add a departement ! " + e.getMessage());
+                }
         }
 
         @Test
         @Order(6)
-        public void getEntrepriseByIdTest1()  {
-            Entreprise ent=serviceEntreprise.getEntrepriseById(2);
-            assertNull(ent);
-        }
+        public void testaffecterDepartementAEntreprise() {
+            log.info("TESTING ADD DEPARTMENT TO ENTREPRISE IN PROGRESS");
+            Entreprise ent = new Entreprise("Espritt", "Education");
+            int idEntrep = serviceEntreprise.ajouterEntreprise(ent);
+            Departement dep = new Departement("Web");
+            int idDep = serviceEntreprise.ajouterDepartement(dep);
+            serviceEntreprise.affecterDepartementAEntreprise(idDep, idEntrep);
+            Assert.assertEquals(idDep,idEntrep);
 
+        }
         @Test
         @Order(7)
-        public void getAllDepartementsNamesByEntrepriseTest1()  {
-            List<String> names=serviceEntreprise.getAllDepartementsNamesByEntreprise(40);
-            assertNotNull(names);
-        }
+        public void testdeleteEntrepriseById() {
+            log.info("TESTING DELETE ENTREPRISE BY ID IN PROGRESS");
 
+            Entreprise ent = new Entreprise("Soc", "DEV");
+            int id = serviceEntreprise.ajouterEntreprise(ent);
+            serviceEntreprise.deleteEntrepriseById(id);
+        }
         @Test
         @Order(8)
-        void testgetAllDepartements() throws Exception {
-        departementList = serviceDepartement.getAllDepartements();
-        if(departementList.isEmpty()) {
-            log.info("departments not found");
-            throw new Exception("Please add a departement");
-        }
-        }
+        public void testdeleteDepartementById() {
+            log.info("TESTING DELETE DEPARTMENT BY ID IN PROGRESS");
+            Departement dep = new Departement("Info");
+            int id = serviceEntreprise.ajouterDepartement(dep);
+            serviceEntreprise.deleteDepartementById(id);
 
-        @Test
-        @Order(9)
-        public void testaffecterDepartementAEntreprise() {
-            Entreprise ent = new Entreprise("MobileDev", "DEV");
-            int idEntrep = serviceEntreprise.ajouterEntreprise(ent);
-            Departement dep = new Departement("WebDep");
-            int idDep = serviceEntreprise.ajouterDepartement(dep);
-            int idEntrepDep = serviceEntreprise.affecterDepartementAEntreprise(idDep, idEntrep);
-            Assert.assertEquals(idEntrepDep,idEntrep);
         }
-
 }
