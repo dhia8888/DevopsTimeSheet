@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.spring.entities.Employe;
 import tn.esprit.spring.entities.Mission;
+import tn.esprit.spring.DTO.MissionDTO;
 import tn.esprit.spring.services.IEmployeService;
 import tn.esprit.spring.services.IEntrepriseService;
 import tn.esprit.spring.services.ITimesheetService;
@@ -32,7 +33,7 @@ public class RestControlTimesheet {
 	//{"id":4,"name":"mamission", "description":"c ma mission"}
 	@PostMapping("/ajouterMission")
 	@ResponseBody
-	public int ajouterMission(@RequestBody Mission mission) {
+	public int ajouterMission(@RequestBody MissionDTO mission) {
 		itimesheetservice.ajouterMission(mission);
 		return mission.getId();
 	}

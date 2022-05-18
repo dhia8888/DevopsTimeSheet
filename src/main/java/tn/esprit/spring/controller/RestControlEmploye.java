@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import tn.esprit.spring.entities.Contrat;
+import tn.esprit.spring.DTO.ContratDTO;
 import tn.esprit.spring.entities.Employe;
+import tn.esprit.spring.DTO.EmployeDTO;
 import tn.esprit.spring.entities.Entreprise;
 import tn.esprit.spring.entities.Mission;
 import tn.esprit.spring.entities.Timesheet;
@@ -38,7 +39,7 @@ public class RestControlEmploye {
 	
 	@PostMapping("/ajouterEmployer")
 	@ResponseBody
-	public Employe ajouterEmploye(@RequestBody Employe employe)
+	public Employe ajouterEmploye(@RequestBody EmployeDTO employe)
 	{
 		iemployeservice.addOrUpdateEmploye(employe);
 		return employe;
@@ -69,7 +70,7 @@ public class RestControlEmploye {
 	//{"reference":6,"dateDebut":"2020-03-01","salaire":2000,"typeContrat":"CDD"}
 	@PostMapping("/ajouterContrat")
 	@ResponseBody
-	public int ajouterContrat(@RequestBody Contrat contrat) {
+	public int ajouterContrat(@RequestBody ContratDTO contrat) {
 		iemployeservice.ajouterContrat(contrat);
 		return contrat.getReference();
 	}
