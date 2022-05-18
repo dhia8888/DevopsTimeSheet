@@ -64,6 +64,9 @@ public class TimesheetServiceImplTest {
         int idDepartement = sEntreprise.ajouterDepartement(departement);
         int idDepAffecte = timesheetService.affecterMissionADepartement(idMission, idDepartement);
         assertEquals(idDepAffecte, idDepartement);
+        if(mission.getDepartement()==departement) {
+            l.trace("Mission affectée au departement avec succés !!!");
+        }
     }
 
     @Test
