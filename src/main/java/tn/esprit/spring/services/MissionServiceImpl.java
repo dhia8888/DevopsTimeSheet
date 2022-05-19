@@ -3,11 +3,13 @@ package tn.esprit.spring.services;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tn.esprit.spring.entities.Mission;
 import tn.esprit.spring.repository.MissionRepository;
 
+import java.util.List;
 import java.util.Optional;
-
+@Service
 public class MissionServiceImpl implements IMissionService{
 
     private MissionRepository missionRepository;
@@ -36,7 +38,7 @@ public class MissionServiceImpl implements IMissionService{
     }
 
     @Override
-    public Iterable<Mission> getAll() {
-        return missionRepository.findAll();
+    public List<Mission> getAll() {
+        return (List<Mission>) missionRepository.findAll();
     }
 }

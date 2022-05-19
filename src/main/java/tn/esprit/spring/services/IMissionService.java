@@ -2,6 +2,7 @@ package tn.esprit.spring.services;
 
 import tn.esprit.spring.entities.Mission;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IMissionService {
@@ -9,5 +10,5 @@ public interface IMissionService {
     public Mission update(Mission mission);
     public void delete(int missionId);
     public Optional<Mission> getById(int missionId);
-    public Iterable<Mission> getAll();
+    public List<Mission> getAll();
 }
