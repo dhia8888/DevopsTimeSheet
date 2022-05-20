@@ -1,4 +1,4 @@
-package tn.esprit.spring.DTO;
+package tn.esprit.spring.dto;
 
 import java.util.Date;
 import tn.esprit.spring.entities.Contrat;

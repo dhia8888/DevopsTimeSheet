@@ -1,4 +1,4 @@
-package tn.esprit.spring.DTO;
+package tn.esprit.spring.dto;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
